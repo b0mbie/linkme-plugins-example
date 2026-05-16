@@ -21,11 +21,14 @@ fn main() {
 
 		println!("Loading plugin");
 		assert!(unsafe { (load.0)() }, "failed to load plugin");
+		println!();
 
 		println!("Notifying plugin that everything has loaded");
 		unsafe { (all_loaded.0)() };
+		println!();
 
 		println!("Unloading plugin");
 		unsafe { (unload.0)() };
+		println!();
 	}
 }
