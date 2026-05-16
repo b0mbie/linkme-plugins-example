@@ -1,0 +1,7 @@
+[package]
+name = "plugins-runner"
+edition = "2024"
+
+[dependencies]
+libloading = "0.9.0"
+plugins-core.workspace = true

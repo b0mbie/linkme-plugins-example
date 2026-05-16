@@ -1,0 +1,3 @@
+[alias]
+docs = "doc --no-deps --workspace --exclude example-* --exclude plugins-runner"
+run-plugin = "run --package plugins-runner --"

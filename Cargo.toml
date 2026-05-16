@@ -1,0 +1,12 @@
+[workspace]
+resolver = "3"
+members = [
+	"crates/core",
+	"crates/macro-runtime",
+	"examples/runner",
+	"examples/macro-runtime",
+]
+
+[workspace.dependencies]
+plugins-core = { path = "./crates/core" }
+plugins-macro-rt = { path = "./crates/macro-runtime" }
