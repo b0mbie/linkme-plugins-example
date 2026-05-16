@@ -1,0 +1,13 @@
+[package]
+name = "example-tick"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+plugins-module-rt.workspace = true
+
+[dependencies.log]
+package = "example-logger-module"
+path = "../logger-module"

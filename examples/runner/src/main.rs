@@ -17,6 +17,7 @@ fn main() {
 	{
 		let load = unsafe { plugin.get_fn::<LoadFn>() }.expect("could not find `LoadFn`");
 		let all_loaded = unsafe { plugin.get_fn::<AllLoadedFn>() }.expect("could not find `AllLoadedFn`");
+		let tick = unsafe { plugin.get_fn::<TickFn>() }.expect("could not find `TickFn`");
 		let unload = unsafe { plugin.get_fn::<UnloadFn>() }.expect("could not find `UnloadFn`");
 
 		println!("Loading plugin");
@@ -25,6 +26,16 @@ fn main() {
 
 		println!("Notifying plugin that everything has loaded");
 		unsafe { (all_loaded.0)() };
+		println!();
+
+		println!("Ticking plugin until done");
+		unsafe {
+			while (tick.0)() {
+				std::thread::yield_now();
+			}
+		}
+		println!();
+		println!("... done ticking");
 		println!();
 
 		println!("Unloading plugin");

@@ -1,0 +1,6 @@
+[package]
+name = "example-logger-module"
+edition = "2024"
+
+[dependencies]
+plugins-module-rt.workspace = true

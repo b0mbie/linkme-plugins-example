@@ -6,13 +6,23 @@ pub trait Plugin {
 	/// # Safety
 	/// This function must not be called again after a previous call which returned `true`.
 	unsafe fn load(&mut self) -> bool;
-	/// Notifies the plugin that all other plugins have loaded.
-	fn all_loaded(&mut self);
 	/// Unloads the plugin.
 	/// 
 	/// # Safety
-	/// This function must be paired with *exactly one* previous successful call to [`load`](Plugin::load).
+	/// This function must only be called after a previous successful call to [`load`](Plugin::load).
 	unsafe fn unload(&mut self);
+
+	/// Notifies the plugin that all dependencies have loaded.
+	/// 
+	/// # Safety
+	/// This function must be called after a previous successful call to [`load`](Plugin::load).
+	unsafe fn all_loaded(&mut self);
+	/// Runs a single "tick" of processing on the plugin,
+	/// returning `true` if processing should continue after this call.
+	/// 
+	/// # Safety
+	/// This function must be called after a previous call to [`all_loaded`](Plugin::all_loaded).
+	unsafe fn tick(&self) -> bool;
 }
 
 /// Exports the given type which implements [`Plugin`].
@@ -24,7 +34,8 @@ pub trait Plugin {
 /// impl Plugin for MyPlugin {
 ///     unsafe fn load(&mut self) -> bool { true }
 ///     // ...
-/// # fn all_loaded(&mut self) {}
+/// # unsafe fn all_loaded(&mut self) {}
+/// # unsafe fn tick(&mut self) -> bool {false}
 /// # unsafe fn unload(&mut self) {}
 /// }
 /// export!(: MyPlugin = MyPlugin {});
@@ -45,12 +56,18 @@ macro_rules! export {
 				}
 			}
 			$crate::export! {
+				@fn(TickFn) plugins_core_export_tick() -> bool {
+					unsafe { $crate::Plugin::tick(&mut PLUGIN) }
+				}
+			}
+			$crate::export! {
 				@fn(UnloadFn) plugins_core_export_unload() {
 					unsafe { $crate::Plugin::unload(&mut PLUGIN) }
 				}
 			}
 		};
 	};
+
 	{@fn($Func:ident) $name:ident($($params:tt)*) $(-> $return:ty)? $body:block} => {
 		$crate::$Func! {
 			unsafe extern "C" fn $name($($params)*) $(-> $return)? $body
@@ -58,9 +75,9 @@ macro_rules! export {
 		const _: $crate::funcs::$Func = $crate::funcs::$Func($name);
 	};
 
-	($($whatever:tt)*) => {
+	{$($whatever:tt)*} => {
 		::core::compile_error! {
-			"expected `: <plugin type> = <init>`"
+			"expected `: <plugin type> = <initializer>`"
 		}
 	};
 }

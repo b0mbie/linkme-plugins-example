@@ -1,5 +1,5 @@
 [package]
-name = "plugins-macro-rt"
+name = "plugins-module-rt"
 edition = "2024"
 
 [dependencies]

@@ -1,9 +1,10 @@
-This Cargo workspace demonstrates an example implementation of a plugin system in Rust.
+This Cargo workspace demonstrates an example implementation of a module system for plugins in Rust.
 It includes:
-- a type-safe *core* (`crates/core`) crate,
-- a *macro-based runtime* (`crates/macro-runtime`) using [`linkme`](https://crates.io/crates/linkme) for plugins,
-- an example *plugin runner* (`examples/runner`), and
-- an *example plugin* (`examples/macro-runtime`) utilizing the macro-based runtime.
+- a type-safe *core* (`crates/core`) crate;
+- a *module-based runtime* (`crates/module-runtime`) for plugins,
+  which uses [`linkme`](https://crates.io/crates/linkme) to allow initialization separate modules;
+- an example *plugin runner* (`examples/runner`);
+- an *example plugin* (`examples/module-runtime`) utilizing the module-based runtime.
 
 Run `cargo docs` to generate crate documentation (or `cargo docs --open` to also open it in the default browser),
 and `cargo run-plugin` to invoke the example plugin runner with the path to a plugin binary.
@@ -12,8 +13,8 @@ To test out an example, you can run the following:
 ```sh
 cargo build --release --package example-*
 
-# Run `examples/macro-runtime`:
-cargo run-plugin ./target/release/libexample_macro_runtime.so
+# Run `examples/tick`:
+cargo run-plugin ./target/release/libexample_tick.so
 ```
 In this case, the output could be something like:
 ```

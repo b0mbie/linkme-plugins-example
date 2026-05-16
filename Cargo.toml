@@ -2,11 +2,12 @@
 resolver = "3"
 members = [
 	"crates/core",
-	"crates/macro-runtime",
+	"crates/module-runtime",
 	"examples/runner",
-	"examples/macro-runtime",
+	"examples/logger-module",
+	"examples/tick",
 ]
 
 [workspace.dependencies]
 plugins-core = { path = "./crates/core" }
-plugins-macro-rt = { path = "./crates/macro-runtime" }
+plugins-module-rt = { path = "./crates/module-runtime" }

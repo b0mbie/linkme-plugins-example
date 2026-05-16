@@ -58,6 +58,8 @@ macro_rules! plugin_fn {
 		symbol = $symbol:ident;
 	} => {
 		$(#[$attr])*
+		/// # Layout
+		/// This type is guaranteed to always be a `repr(transparent)` wrapper over its only public field.
 		#[repr(transparent)]
 		pub struct $name(pub unsafe extern "C" fn($($param)*) $(-> $result)?);
 		impl PluginFn for $name {
@@ -90,15 +92,20 @@ use crate::Plugin;
 plugin_fn! {
 	/// See [`Plugin::load`].
 	LoadFn() -> bool;
-	symbol = load;
+	symbol = Load;
 }
 plugin_fn! {
 	/// See [`Plugin::all_loaded`].
 	AllLoadedFn();
-	symbol = all_loaded;
+	symbol = AllLoaded;
+}
+plugin_fn! {
+	/// See [`Plugin::tick`].
+	TickFn() -> bool;
+	symbol = Tick;
 }
 plugin_fn! {
 	/// See [`Plugin::unload`].
 	UnloadFn();
-	symbol = unload;
+	symbol = Unload;
 }
