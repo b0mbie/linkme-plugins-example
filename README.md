@@ -1,7 +1,7 @@
 This Cargo workspace demonstrates an example implementation of a plugin system in Rust.
 It includes:
 - a type-safe *core* crate,
-- a *macro-based runtime* for plugins,
+- a *macro-based runtime* using [`linkme`](https://crates.io/crates/linkme) for plugins,
 - an example *plugin runner*, and
 - an *example plugin* utilizing the macro-based runtime.
 
